@@ -2,334 +2,75 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>終活 不安診断 | ライフサポーター</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ライフサポーターオンライン</title>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --success-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --bg-color: #f5f6fa;
-            --text-dark: #333;
+        body { font-family: sans-serif; margin: 0; padding: 0; color: #333; line-height: 1.6; background-color: #f9f9f9; }
+        
+        .wrap { 
+            max-width: 550px; 
+            margin: 0 auto; 
+            background: #fff; 
+            padding: 20px; 
+            box-sizing: border-box;
+            min-height: 100vh;
         }
 
-        body {
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            text-align: center;
-            background: var(--bg-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            color: var(--text-dark);
-        }
-
-        h2 {
-            background: var(--text-dark);
-            color: #fff;
-            padding: 16px;
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .box {
-            display: none;
-            background: #fff;
-            margin: 15px auto;
-            padding: 25px 15px;
-            border-radius: 14px;
-            max-width: 500px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        p {
+        .banner-container {
+            width: 100%;
             margin-bottom: 20px;
-            font-size: 18px;
         }
-
-        button {
+        .banner-container img {
+            width: 100%;
+            height: auto;
             display: block;
-            padding: 18px;
-            margin: 12px auto;
-            width: 95%;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
         }
 
-        button:active { transform: scale(0.98); opacity: 0.9; }
+        .content-area { text-align: center; padding: 20px 0; }
+        h2 { font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+        p { font-size: 18px; margin-bottom: 20px; }
 
-        .yes { background: var(--success-color); color: #fff; }
-        .no { background: var(--danger-color); color: #fff; }
-        .mainBtn { background: var(--primary-color); color: #fff; }
-        .ctaBtn { background: var(--danger-color); color: #fff; font-size: 22px; }
-
-        input[type="number"] {
-            font-size: 24px;
-            padding: 12px;
-            width: 60%;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .type { font-size: 24px; color: var(--danger-color); font-weight: bold; }
-        .highlight { color: var(--danger-color); font-weight: bold; }
-
-        /* レビューセクション */
-        .review-container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 10px;
-        }
-
-        .review {
-            background: #fff;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            text-align: left;
-        }
-
-        .stars { display: flex; align-items: center; margin-top: 8px; }
-        .star {
-            width: 14px; height: 14px;
-            border: 1px solid #ccc;
-            margin-right: 3px;
-        }
-        .green { background: #2ecc71; border-color: #27ae60; }
-        .red { background: #e74c3c; border-color: #c0392b; }
-        .star-label { margin-left: 10px; font-size: 12px; color: #666; font-weight: bold; }
-
-        a { text-decoration: none; }
-        hr { border: 0; border-top: 1px dashed #ccc; margin: 30px 0; }
+        .qrcode { margin: 20px auto; }
+        .addfriend_btn { width: 100%; max-width: 300px; display: inline-block; }
     </style>
 </head>
 <body>
 
-<h2>終活 不安診断</h2>
-
-<div id="start" class="box" style="display:block;">
-    <p><b>将来、家族に迷惑をかけないためのチェックです</b></p>
-    <p>今の状況を3分で確認できます</p>
-    <button class="mainBtn" onclick="show('age')">▶ 診断スタート</button>
-</div>
-
-<div id="age" class="box">
-    <p>あなたの年齢を教えてください</p>
-    <input type="number" id="ageInput" placeholder="例: 65" inputmode="numeric">
-    <button class="mainBtn" onclick="saveAge()">▶ 次へ</button>
-</div>
-
-<div id="q1" class="box">
-    <p>医療に不安はありますか？</p>
-    <button class="yes" onclick="ans(1,'q2','医療')">YES</button>
-    <button class="no" onclick="ans(0,'q2','')">NO</button>
-</div>
-
-<div id="q2" class="box">
-    <p>介護に不安はありますか？</p>
-    <button class="yes" onclick="ans(1,'q3','介護')">YES</button>
-    <button class="no" onclick="ans(0,'q3','')">NO</button>
-</div>
-
-<div id="q3" class="box">
-    <p>相続やお金に不安はありますか？</p>
-    <button class="yes" onclick="ans(1,'q4','相続')">YES</button>
-    <button class="no" onclick="ans(0,'q4','')">NO</button>
-</div>
-
-<div id="q4" class="box">
-    <p>葬儀やお墓に不安はありますか？</p>
-    <button class="yes" onclick="ans(1,'q5','葬儀')">YES</button>
-    <button class="no" onclick="ans(0,'q5','')">NO</button>
-</div>
-
-<div id="q5" class="box">
-    <p>整理や遺品に不安はありますか？</p>
-    <button class="yes" onclick="ans(1,'q6','整理')">YES</button>
-    <button class="no" onclick="ans(0,'q6','')">NO</button>
-</div>
-
-<div id="q6" class="box">
-    <p>スマホやパスワード管理できていますか？</p>
-    <button class="yes" onclick="ans(0,'result','')">YES (できている)</button>
-    <button class="no" onclick="ans(1,'result','デジタル')">NO (不安がある)</button>
-</div>
-
-<div id="result" class="box">
-    <p id="type" class="type"></p>
-    <p id="resultText"></p>
-    <p id="suggest" style="color:#2980b9; font-weight:bold;"></p>
-    <hr>
-    <p class="highlight">今のままだと、将来ご家族が<br>困る可能性があります</p>
-    <p>ですが、今から準備すれば安心できます</p>
-    <button class="ctaBtn" onclick="show('service')">▶ 今すぐ対策方法を見る</button>
-</div>
-
-<div id="service" class="box">
-    <h3>あなたとご家族の不安を<br>まとめて解決できます</h3>
-    <ul style="text-align:left; display:inline-block; margin-bottom:20px;">
-        <li>見守り・安心サービス</li>
-        <li>医療・介護・相続の情報管理</li>
-        <li>パスワード・デジタル遺品対策</li>
-        <li>消えない思い出（写真・動画）保存</li>
-        <li>脳トレ・ゲーム（50種類以上）</li>
-    </ul>
-    <button class="mainBtn" onclick="show('offer')">▶ 詳しく知りたい</button>
-    <button class="no" style="background:#95a5a6;" onclick="show('retry')">今回は見送る</button>
-</div>
-
-<div id="offer" class="box">
-    <p><b>今のうちに準備しておくと、<br>ご家族の負担が劇的に減ります</b></p>
-    <p>まずは詳細を確認してみませんか？</p>
-    <button class="yes" onclick="show('price')">YES (詳細を見る)</button>
-    <button class="no" onclick="show('retry')">NO</button>
-</div>
-
-<div id="price" class="box">
-    <p>月額いくらなら利用したいですか？</p>
-    <button class="mainBtn" onclick="final()">500円程度</button>
-    <button class="mainBtn" onclick="final()">1,000円程度</button>
-    <button class="mainBtn" onclick="final()">1,500円程度</button>
-</div>
-
-<div id="retry" class="box">
-    <p class="highlight">まずは無料で試してみてください</p>
-    <div style="text-align:left; background:#fff9f9; padding:15px; border-radius:10px; border:1px solid #ffcccc; margin-bottom:20px;">
-        <p style="margin:5px 0;">✔ 14日間完全無料</p>
-        <p style="margin:5px 0;">✔ 登録はたった1分</p>
-        <p style="margin:5px 0;">✔ いつでも解約OK</p>
+<div class="wrap">
+    <div class="banner-container">
+        <img src="https://life-supporter.jp/sp/hxySQ4ff/ct5NJq8Z/images/XS012099.jpg" alt="ライフサポーターオンライン">
     </div>
-    <button class="ctaBtn" onclick="show('cta')">▶ 無料体験を見てみる</button>
+    
+    <div class="content-area">
+        <h2>ライフサポーター<br>オンライン</h2>
+        <p>ライフサポーターオンライン会員サイトで利用できるツールやゲームなど約100個の中から厳選した5選です。</p>
+        <p>以下よりご利用ください</p>
+<p><a href="https://life-supporter.jp/l/u/xIZ5ARAg4QB8wmFx">オンライン便利ツール5選プレゼント</a></p>
+        
+        <p>条件なしで、すぐにアプリが利用できます。</p>
+         <p>いつでも見れるように、ブックマークかホーム画面に追加してください。</p>
+    </div>
+    <img src="https://life-supporter.jp/sp/hxySQ4ff/8BaRR2j8/images/XS012098.jpg" style="display:block; margin:20px auto; max-width:100%;">
 </div>
 
-<div id="cta" class="box">
-    <h3>もしもの時、あなたの想いは<br>きちんと伝わりますか？</h3>
-    <p><b>「何も準備していないと、家族が困ることになります」</b></p>
-    <p class="highlight">⏰ 無料体験枠は残りわずかです</p>
-    
-    <a href="https://life-supporter.jp/lp/HRSuykFf" target="_blank">
-        <button class="ctaBtn">▶ 今すぐ無料で試してみる</button>
-    </a>
-    
-    <p style="font-size:14px; color:#666;">＼ 14日間無料・名前とメールだけでOK ／</p>
-    
-    <a href="https://g0qiltvg.autosns.app/line" target="_blank">
-        <button style="background:#06C755;color:#fff;font-size:20px;">▶ LINEで無料相談する</button>
-    </a>
-</div>
-
-<div class="review-container">
-    <hr>
-    <h3>実際に利用されている方の声</h3>
-    <div id="reviewArea"></div>
-</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://autosns.jp/js/zbp/jquery.qrcode.min.js"></script>
+<script src="https://g0qiltvg.autosns.app/copy-qr/js?height=200&show=1"></script>
 
 <script>
-let score = 0;
-let needs = [];
-let userAge = 0;
-
-function hideAll() {
-    let boxes = document.getElementsByClassName("box");
-    for(let i=0; i<boxes.length; i++) { boxes[i].style.display = "none"; }
-}
-
-function show(id) {
-    hideAll();
-    let el = document.getElementById(id);
-    el.style.display = "block";
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function saveAge() {
-    const val = document.getElementById("ageInput").value;
-    if(val && val > 0) {
-        userAge = val;
-        show('q1');
-    } else {
-        alert("年齢を正しく入力してください");
-    }
-}
-
-function ans(v, next, tag) {
-    score += v;
-    if(tag) needs.push(tag);
-    
-    if(next === "result") {
-        let type = "", text = "";
-        if(score <= 1) {
-            type = "安心準備タイプ";
-            text = "現在は比較的整理されていますが、念のための備えが大切です。";
-        } else if(score <= 3) {
-            type = "これから準備タイプ";
-            text = "少しずつ不安要素が出てきています。今から整理を始めると安心です。";
-        } else {
-            type = "早急な対策が必要タイプ";
-            text = "ご家族に負担をかけるリスクが高い状態です。早めの対策をお勧めします。";
+    window.addEventListener("load", function() {
+        let url = new URL(window.location.href);
+        let get_params = {};
+        for(entry of url.searchParams) { get_params[entry[0]] = entry[1]; }
+        get_params['partner_id'] = "A8ildpNc2q";
+        for(key in get_params) { 
+            let span = document.createElement('span');
+            span.className = 'proline-copy-qr-get-params';
+            span.setAttribute('data-key', key);
+            span.setAttribute('data-value', get_params[key]);
+            document.body.appendChild(span);
         }
-        document.getElementById("type").textContent = "診断結果：あなたは『" + type + "』です";
-        document.getElementById("resultText").textContent = text;
-        document.getElementById("suggest").textContent = needs.length > 0 ? "注目すべき項目：" + needs.join("・") : "全体的な見直しをお勧めします";
-    }
-    show(next);
-}
-
-function final() {
-    show('cta');
-}
-
-// レビューデータ
-const reviews = [
-    {name:"60代 女性", text:"子どもに迷惑をかけたくなくて始めました。少しずつ整理できて安心しています。"},
-    {name:"50代 男性", text:"何から始めればいいか悩みましたが、項目が整理されていて助かりました。"},
-    {name:"70代 女性", text:"スマホ操作が不安でしたが、これなら私にも続けられそうです。"},
-    {name:"60代 男性", text:"自分に万が一があった時のための備えとして、非常に実用的です。"},
-    {name:"80代 女性", text:"準備が進むことで、将来への不安が軽くなり、毎日が楽しくなりました。"}
-];
-
-function renderStars(n) {
-    let html = '<div class="stars">';
-    for(let i=1; i<=10; i++) {
-        let cls = i <= n ? (n < 9 ? 'green' : 'red') : '';
-        html += `<div class="star ${cls}"></div>`;
-    }
-    const labels = ["", "", "", "", "", "", "", "良い", "とても良い", "最高", "満点"];
-    html += `<span class="star-label">満足度：${labels[n]}</span></div>`;
-    return html;
-}
-
-function updateReviews() {
-    const area = document.getElementById("reviewArea");
-    let shuffled = [...reviews].sort(() => 0.5 - Math.random());
-    let html = '';
-    for(let i=0; i<3; i++) {
-        let starCount = Math.floor(Math.random() * 3) + 8; // 8~10
-        html += `<div class="review">
-            <p><strong>■ ${shuffled[i].name}</strong></p>
-            <p style="font-size:15px;">${shuffled[i].text}</p>
-            ${renderStars(starCount)}
-        </div>`;
-    }
-    area.innerHTML = html;
-}
-
-// ページ読み込み時の処理
-window.onload = function() {
-    updateReviews();
-    setInterval(updateReviews, 5000); // 5秒ごとにレビュー更新
-};
+    });
 </script>
 
 </body>
